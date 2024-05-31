@@ -1,0 +1,19 @@
+{
+    "helloWorld": "Hello World from {name}!",
+    "@helloWorld": {
+      "description": "The conventional newborn programmer greeting",
+      "placeholders": {
+        "name": {
+            "type": "String",
+            "example": "Max"
+        }
+      }
+    },
+    "toggleLocale": "Toggle Locale",
+    "toggleTheme": "Toggle Theme",
+    "navExampleGo": "Navigation Example",
+    "navExampleBack": "Go Back",
+    "notifExample": "Send Notification",
+    "notifTitle": "Notification Example",
+    "notifBody": "This is an example Notification."
+  }

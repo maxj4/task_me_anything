@@ -1,0 +1,10 @@
+{
+    "helloWorld": "Hallo Welt von {name}!",
+    "toggleLocale": "Sprache ändern",
+    "toggleTheme": "Theme ändern",
+    "navExampleGo": "Navigationsbeispiel",
+    "navExampleBack": "Zurück",
+    "notifExample": "Benachrichtigung senden",
+    "notifTitle": "Beispielbenachrichtigung",
+    "notifBody": "Das ist eine Beispielbenachrichtigung."
+}
