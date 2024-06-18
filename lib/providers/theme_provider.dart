@@ -1,10 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
-final themes = [
-  ThemeData.light(),
-  ThemeData.dark(),
-];
+import 'package:task_me_anything/shared/themes.dart';
 
 class ThemeProvider extends ChangeNotifier {
   static const String _themePreferenceKey = 'theme';

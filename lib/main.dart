@@ -26,7 +26,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp.router(
-      title: 'Basic Flutter Template',
+      title: 'Task Me Anything',
       debugShowCheckedModeBanner: false,
       // l10n
       localizationsDelegates: AppLocalizations.localizationsDelegates,

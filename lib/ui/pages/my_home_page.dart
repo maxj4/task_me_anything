@@ -12,42 +12,15 @@ class MyHomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Basic Flutter Template'),
-      ),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text(context.loc.helloWorld('Flutter')),
-            const SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: () {
-                context.read<LocaleProvider>().toggleLocale();
-              },
-              child: Text(context.loc.toggleLocale),
-            ),
-            const SizedBox(height: 20),
             ElevatedButton(
               onPressed: () {
                 context.read<ThemeProvider>().toggleTheme();
               },
               child: Text(context.loc.toggleTheme),
-            ),
-            const SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: () {
-                GoRouter.of(context).push('/example');
-              },
-              child: Text(context.loc.navExampleGo),
-            ),
-            const SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: () {
-                NotificationService.showNotification(
-                    title: context.loc.notifTitle, body: context.loc.notifBody);
-              },
-              child: Text(context.loc.notifExample),
             ),
           ],
         ),
