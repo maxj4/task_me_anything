@@ -1,6 +1,5 @@
-import 'package:task_me_anything/constants.dart';
+import 'package:task_me_anything/shared/constants.dart';
 import 'package:task_me_anything/ui/pages/my_home_page.dart';
-import 'package:task_me_anything/ui/pages/nav_example_page.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
@@ -16,10 +15,10 @@ final router = GoRouter(
       path: homeRoute,
       builder: (context, state) => const MyHomePage(),
     ),
-    GoRoute(
-      path: exampleRoute,
-      builder: (context, state) => const NavExamplePage(),
-    )
+    // GoRoute(
+    //   path: exampleRoute,
+    //   builder: (context, state) => const NavExamplePage(),
+    // )
     // Use ShellRoute for nested routes, e.g. to keep a BottomNavigationBar on the screen and
     // only navigate the content area (body) of the screen.
     // ShellRoute(

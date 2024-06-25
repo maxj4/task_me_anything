@@ -1,0 +1,25 @@
+import 'package:task_me_anything/models/task.dart';
+import 'package:task_me_anything/repositories/task_repository.dart';
+import 'package:task_me_anything/utils/db_helper.dart';
+
+class TaskRepositoryImpl implements TaskRepository {
+  final DbHelper _dbHelper;
+
+  TaskRepositoryImpl(this._dbHelper);
+
+  @override
+  Future<List<Task>> getTasks() async {
+    final tasks = await _dbHelper.queryAllRows();
+    return tasks.map((task) => Task.fromMap(task)).toList();
+  }
+
+  @override
+  Future<void> addTask(Task task) async {
+    await _dbHelper.insert(task.toMap());
+  }
+
+  @override
+  Future<void> deleteTask(int id) async {
+    await _dbHelper.delete(id);
+  }
+}
