@@ -24,18 +24,19 @@ class _TaskListState extends State<TaskList> {
     return Flexible(
       child: FractionallySizedBox(
         heightFactor: 0.5,
-        widthFactor: 0.66,
+        widthFactor: 0.75,
         child: Column(
           children: [
             Container(
               decoration: taskListBoxDecoration(theme),
               margin: const EdgeInsets.symmetric(vertical: 8),
-              padding: const EdgeInsets.fromLTRB(16, 8, 16, 8),
+              padding: const EdgeInsets.fromLTRB(16, 8, 8, 8),
               child: Row(
                 children: [
                   Expanded(
                     child: TextField(
                       controller: addTaskController,
+                      style: theme.textTheme.bodyLarge,
                       decoration: InputDecoration(
                         labelText: context.loc.addTask,
                         border: InputBorder.none,
@@ -97,13 +98,24 @@ class TaskWidget extends StatelessWidget {
     return Container(
       decoration: taskListBoxDecoration(theme),
       margin: const EdgeInsets.symmetric(vertical: 8),
-      padding: const EdgeInsets.fromLTRB(16, 8, 16, 8),
+      padding: const EdgeInsets.fromLTRB(8, 8, 8, 8),
       child: Row(
         children: [
+          IconButton(
+            icon: Icon(
+                task.isDone ? Icons.check_box : Icons.check_box_outline_blank),
+            onPressed: () async {
+              await taskProvider.toggleIsDone(task.id!);
+            },
+          ),
           Expanded(
             child: Text(
               '#${task.id} ${task.content}',
-              style: theme.textTheme.bodyLarge,
+              style: theme.textTheme.bodyLarge!.copyWith(
+                  decoration: task.isDone ? TextDecoration.lineThrough : null,
+                  color: task.isDone
+                      ? theme.colorScheme.onSurface.withOpacity(0.6)
+                      : null),
             ),
           ),
           IconButton(

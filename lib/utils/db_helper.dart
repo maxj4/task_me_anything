@@ -38,8 +38,20 @@ class DbHelper {
     return await db.insert('tasks', row);
   }
 
+  Future<int> update(Map<String, dynamic> row) async {
+    final db = await database;
+    return await db
+        .update('tasks', row, where: 'id = ?', whereArgs: [row['id']]);
+  }
+
   Future<int> delete(int id) async {
     final db = await database;
     return await db.delete('tasks', where: 'id = ?', whereArgs: [id]);
+  }
+
+  Future<Map<String, dynamic>> queryById(int id) async {
+    final db = await database;
+    final result = await db.query('tasks', where: 'id = ?', whereArgs: [id]);
+    return result.first;
   }
 }

@@ -25,4 +25,16 @@ class Task {
       isDone: map['isDone'] == 1,
     );
   }
+
+  Task copyWith({
+    int? id,
+    String? content,
+    bool? isDone,
+  }) {
+    return Task(
+      id: id ?? this.id,
+      content: content ?? this.content,
+      isDone: isDone ?? this.isDone,
+    );
+  }
 }

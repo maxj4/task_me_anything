@@ -22,4 +22,12 @@ class TaskRepositoryImpl implements TaskRepository {
   Future<void> deleteTask(int id) async {
     await _dbHelper.delete(id);
   }
+
+  @override
+  Future<void> toggleIsDone(int id) async {
+    final task = await _dbHelper.queryById(id);
+    await _dbHelper.update(Task.fromMap(task)
+        .copyWith(isDone: !Task.fromMap(task).isDone)
+        .toMap());
+  }
 }

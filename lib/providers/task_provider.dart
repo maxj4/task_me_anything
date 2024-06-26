@@ -31,4 +31,9 @@ class TaskProvider extends ChangeNotifier {
     await _taskService.deleteTask(id);
     await _loadTasks();
   }
+
+  Future<void> toggleIsDone(int id) async {
+    await _taskService.toggleIsDone(id);
+    await _loadTasks();
+  }
 }
