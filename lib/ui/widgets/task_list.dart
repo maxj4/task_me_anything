@@ -108,8 +108,7 @@ class TaskWidget extends StatelessWidget {
           ),
           IconButton(
             icon: const Icon(Icons.delete),
-            onPressed: () async {
-              // TODO show confirm dialog first
+            onPressed: () {
               showDialog(
                 context: context,
                 builder: (BuildContext context) {
@@ -128,6 +127,7 @@ class TaskWidget extends StatelessWidget {
                         onPressed: () async {
                           Navigator.of(context).pop();
                           await taskProvider.deleteTask(task.id!);
+                          if (!context.mounted) return;
                           ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(
                               content: Text(context.loc.taskDeleted),
