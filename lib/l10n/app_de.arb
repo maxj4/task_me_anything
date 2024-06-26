@@ -7,5 +7,9 @@
     "notifExample": "Benachrichtigung senden",
     "notifTitle": "Beispielbenachrichtigung",
     "notifBody": "Das ist eine Beispielbenachrichtigung.",
-    "addTask": "Task hinzufügen"
+    "addTask": "Task hinzufügen",
+    "taskDeleted": "Task gelöscht.",
+    "cancel": "Abbrechen",
+    "delete": "Löschen",
+    "confirmDelete": "Diesen Task löschen?"
 }

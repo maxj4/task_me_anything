@@ -28,17 +28,7 @@ class _TaskListState extends State<TaskList> {
         child: Column(
           children: [
             Container(
-              decoration: BoxDecoration(
-                color: theme.colorScheme.surface,
-                borderRadius: BorderRadius.circular(8),
-                boxShadow: [
-                  BoxShadow(
-                    color: theme.colorScheme.shadow.withOpacity(0.2),
-                    blurRadius: 4,
-                    offset: const Offset(0, 2),
-                  ),
-                ],
-              ),
+              decoration: taskListBoxDecoration(theme),
               margin: const EdgeInsets.symmetric(vertical: 8),
               padding: const EdgeInsets.fromLTRB(16, 8, 16, 8),
               child: Row(
@@ -92,12 +82,12 @@ class _TaskListState extends State<TaskList> {
 }
 
 class TaskWidget extends StatelessWidget {
+  final Task task;
+
   const TaskWidget({
     super.key,
     required this.task,
   });
-
-  final Task task;
 
   @override
   Widget build(BuildContext context) {
@@ -105,17 +95,7 @@ class TaskWidget extends StatelessWidget {
     final TaskProvider taskProvider = Provider.of<TaskProvider>(context);
 
     return Container(
-      decoration: BoxDecoration(
-        color: theme.colorScheme.surface,
-        borderRadius: BorderRadius.circular(8),
-        boxShadow: [
-          BoxShadow(
-            color: theme.colorScheme.shadow.withOpacity(0.2),
-            blurRadius: 4,
-            offset: const Offset(0, 2),
-          ),
-        ],
-      ),
+      decoration: taskListBoxDecoration(theme),
       margin: const EdgeInsets.symmetric(vertical: 8),
       padding: const EdgeInsets.fromLTRB(16, 8, 16, 8),
       child: Row(
@@ -129,12 +109,35 @@ class TaskWidget extends StatelessWidget {
           IconButton(
             icon: const Icon(Icons.delete),
             onPressed: () async {
-              await taskProvider.deleteTask(task.id!);
-              ScaffoldMessenger.of(context).showSnackBar(
-                // TODO avoid async gaps
-                const SnackBar(
-                  content: Text('Task deleted'),
-                ),
+              // TODO show confirm dialog first
+              showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  return AlertDialog(
+                    content: Text(context.loc.confirmDelete),
+                    contentPadding: const EdgeInsets.fromLTRB(24, 24, 24, 12),
+                    actions: [
+                      TextButton(
+                        child: Text(context.loc.cancel),
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                        },
+                      ),
+                      TextButton(
+                        child: Text(context.loc.delete),
+                        onPressed: () async {
+                          Navigator.of(context).pop();
+                          await taskProvider.deleteTask(task.id!);
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text(context.loc.taskDeleted),
+                            ),
+                          );
+                        },
+                      ),
+                    ],
+                  );
+                },
               );
             },
           ),
@@ -142,4 +145,18 @@ class TaskWidget extends StatelessWidget {
       ),
     );
   }
+}
+
+BoxDecoration taskListBoxDecoration(ThemeData theme) {
+  return BoxDecoration(
+    color: theme.colorScheme.surface,
+    borderRadius: BorderRadius.circular(8),
+    boxShadow: [
+      BoxShadow(
+        color: theme.colorScheme.shadow.withOpacity(0.2),
+        blurRadius: 4,
+        offset: const Offset(0, 2),
+      ),
+    ],
+  );
 }

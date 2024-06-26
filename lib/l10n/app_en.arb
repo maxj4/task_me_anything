@@ -16,5 +16,9 @@
     "notifExample": "Send Notification",
     "notifTitle": "Notification Example",
     "notifBody": "This is an example Notification.",
-    "addTask": "Add a new Task"
+    "addTask": "Add a new Task",
+    "taskDeleted": "Task deleted.",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "confirmDelete": "Delete this Task?"
   }
