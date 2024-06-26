@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:task_me_anything/models/task.dart';
 import 'package:task_me_anything/providers/task_provider.dart';
+import 'package:task_me_anything/utils/extensions/buildcontext/loc.dart';
 
 class TaskList extends StatefulWidget {
   final List<Task> tasks;
@@ -45,8 +46,8 @@ class _TaskListState extends State<TaskList> {
                   Expanded(
                     child: TextField(
                       controller: addTaskController,
-                      decoration: const InputDecoration(
-                        labelText: 'Add a task',
+                      decoration: InputDecoration(
+                        labelText: context.loc.addTask,
                         border: InputBorder.none,
                       ),
                       onSubmitted: (content) async {

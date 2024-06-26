@@ -6,5 +6,6 @@
     "navExampleBack": "Zurück",
     "notifExample": "Benachrichtigung senden",
     "notifTitle": "Beispielbenachrichtigung",
-    "notifBody": "Das ist eine Beispielbenachrichtigung."
+    "notifBody": "Das ist eine Beispielbenachrichtigung.",
+    "addTask": "Task hinzufügen"
 }

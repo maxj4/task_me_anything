@@ -15,5 +15,6 @@
     "navExampleBack": "Go Back",
     "notifExample": "Send Notification",
     "notifTitle": "Notification Example",
-    "notifBody": "This is an example Notification."
+    "notifBody": "This is an example Notification.",
+    "addTask": "Add a new Task"
   }
