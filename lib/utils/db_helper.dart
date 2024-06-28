@@ -22,7 +22,7 @@ class DbHelper {
       version: 1,
       onCreate: (db, version) {
         return db.execute(
-          'CREATE TABLE tasks(id INTEGER PRIMARY KEY AUTOINCREMENT, content TEXT, isDone INTEGER)',
+          'CREATE TABLE tasks(id INTEGER PRIMARY KEY AUTOINCREMENT, content TEXT, isDone INTEGER, timeSpentInMinutes INTEGER)',
         );
       },
     );

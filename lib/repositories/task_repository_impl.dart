@@ -30,4 +30,13 @@ class TaskRepositoryImpl implements TaskRepository {
         .copyWith(isDone: !Task.fromMap(task).isDone)
         .toMap());
   }
+
+  @override
+  Future<void> logTime({required int id, required int minutes}) async {
+    final task = await _dbHelper.queryById(id);
+    await _dbHelper.update(Task.fromMap(task)
+        .copyWith(
+            timeSpentInMinutes: Task.fromMap(task).timeSpentInMinutes + minutes)
+        .toMap());
+  }
 }

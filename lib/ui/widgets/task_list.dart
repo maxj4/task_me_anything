@@ -84,8 +84,9 @@ class _TaskListState extends State<TaskList> {
 
 class TaskWidget extends StatelessWidget {
   final Task task;
+  final TextEditingController timeSpentController = TextEditingController();
 
-  const TaskWidget({
+  TaskWidget({
     super.key,
     required this.task,
   });
@@ -103,13 +104,60 @@ class TaskWidget extends StatelessWidget {
         children: [
           Expanded(
             child: Text(
-              '#${task.id} ${task.content}',
+              '#${task.id} ${task.content} ${task.timeSpentInMinutes}min',
               style: theme.textTheme.bodyLarge!.copyWith(
                   decoration: task.isDone ? TextDecoration.lineThrough : null,
                   color: task.isDone
                       ? theme.colorScheme.onSurface.withOpacity(0.6)
                       : null),
             ),
+          ),
+          IconButton(
+            icon: const Icon(Icons.access_time),
+            onPressed: () {
+              showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  return AlertDialog(
+                    title: Text(context.loc.timeSpent),
+                    content: Row(
+                      children: [
+                        Expanded(
+                            child: TextField(
+                          controller: timeSpentController,
+                          decoration: InputDecoration(
+                            labelText: context.loc.minutes,
+                          ),
+                          keyboardType: TextInputType.number,
+                          onSubmitted: (_) async {
+                            FocusScope.of(context).unfocus();
+                          },
+                        ))
+                      ],
+                    ),
+                    contentPadding: const EdgeInsets.fromLTRB(24, 24, 24, 12),
+                    actions: [
+                      TextButton(
+                        child: Text(context.loc.cancel),
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                        },
+                      ),
+                      TextButton(
+                        child: Text(context.loc.ok),
+                        onPressed: () async {
+                          int timeSpent =
+                              int.tryParse(timeSpentController.text) ?? 0;
+                          Navigator.of(context).pop();
+                          await taskProvider.logTime(
+                              id: task.id!, minutes: timeSpent);
+                        },
+                      ),
+                    ],
+                  );
+                },
+              );
+            },
           ),
           IconButton(
             icon: Icon(

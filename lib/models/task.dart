@@ -2,12 +2,13 @@ class Task {
   final int? id;
   final String content;
   final bool isDone;
-  // TODO: timeSpent
+  final int timeSpentInMinutes;
 
   Task({
     this.id,
     required this.content,
     this.isDone = false,
+    this.timeSpentInMinutes = 0,
   });
 
   Map<String, dynamic> toMap() {
@@ -15,6 +16,7 @@ class Task {
       'id': id,
       'content': content,
       'isDone': isDone ? 1 : 0,
+      'timeSpentInMinutes': timeSpentInMinutes,
     };
   }
 
@@ -23,6 +25,7 @@ class Task {
       id: map['id'],
       content: map['content'],
       isDone: map['isDone'] == 1,
+      timeSpentInMinutes: map['timeSpentInMinutes'],
     );
   }
 
@@ -30,11 +33,13 @@ class Task {
     int? id,
     String? content,
     bool? isDone,
+    int? timeSpentInMinutes,
   }) {
     return Task(
       id: id ?? this.id,
       content: content ?? this.content,
       isDone: isDone ?? this.isDone,
+      timeSpentInMinutes: timeSpentInMinutes ?? this.timeSpentInMinutes,
     );
   }
 }

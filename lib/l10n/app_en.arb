@@ -18,7 +18,10 @@
     "notifBody": "This is an example Notification.",
     "addTask": "Add a new Task",
     "taskDeleted": "Task deleted.",
+    "ok": "Ok",
     "cancel": "Cancel",
     "delete": "Delete",
-    "confirmDelete": "Delete this Task?"
+    "confirmDelete": "Delete this Task?",
+    "timeSpent": "Log Time",
+    "minutes": "Minutes"
   }

@@ -13,4 +13,7 @@ class TaskService {
   Future<void> deleteTask(int id) => _taskRepository.deleteTask(id);
 
   Future<void> toggleIsDone(int id) => _taskRepository.toggleIsDone(id);
+
+  Future<void> logTime({required int id, required int minutes}) =>
+      _taskRepository.logTime(id: id, minutes: minutes);
 }

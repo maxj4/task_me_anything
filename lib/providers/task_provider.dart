@@ -36,4 +36,9 @@ class TaskProvider extends ChangeNotifier {
     await _taskService.toggleIsDone(id);
     await _loadTasks();
   }
+
+  Future<void> logTime({required int id, required int minutes}) async {
+    await _taskService.logTime(id: id, minutes: minutes);
+    await _loadTasks();
+  }
 }

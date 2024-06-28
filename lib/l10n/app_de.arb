@@ -9,7 +9,10 @@
     "notifBody": "Das ist eine Beispielbenachrichtigung.",
     "addTask": "Task hinzufügen",
     "taskDeleted": "Task gelöscht.",
+    "ok": "Ok",
     "cancel": "Abbrechen",
     "delete": "Löschen",
-    "confirmDelete": "Diesen Task löschen?"
+    "confirmDelete": "Diesen Task löschen?",
+    "timeSpent": "Zeit protokollieren",
+    "minutes": "Minuten"
 }
