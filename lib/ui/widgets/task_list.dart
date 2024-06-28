@@ -98,16 +98,9 @@ class TaskWidget extends StatelessWidget {
     return Container(
       decoration: taskListBoxDecoration(theme),
       margin: const EdgeInsets.symmetric(vertical: 8),
-      padding: const EdgeInsets.fromLTRB(8, 8, 8, 8),
+      padding: const EdgeInsets.fromLTRB(16, 8, 8, 8),
       child: Row(
         children: [
-          IconButton(
-            icon: Icon(
-                task.isDone ? Icons.check_box : Icons.check_box_outline_blank),
-            onPressed: () async {
-              await taskProvider.toggleIsDone(task.id!);
-            },
-          ),
           Expanded(
             child: Text(
               '#${task.id} ${task.content}',
@@ -117,6 +110,13 @@ class TaskWidget extends StatelessWidget {
                       ? theme.colorScheme.onSurface.withOpacity(0.6)
                       : null),
             ),
+          ),
+          IconButton(
+            icon: Icon(
+                task.isDone ? Icons.check_box : Icons.check_box_outline_blank),
+            onPressed: () async {
+              await taskProvider.toggleIsDone(task.id!);
+            },
           ),
           IconButton(
             icon: const Icon(Icons.delete),
