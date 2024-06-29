@@ -23,7 +23,7 @@ class _TaskListState extends State<TaskList> {
 
     return Flexible(
       child: FractionallySizedBox(
-        heightFactor: 0.5,
+        heightFactor: 0.66,
         widthFactor: 0.75,
         child: Column(
           children: [

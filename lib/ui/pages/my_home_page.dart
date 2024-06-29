@@ -4,6 +4,7 @@ import 'package:task_me_anything/models/task.dart';
 import 'package:task_me_anything/ui/widgets/task_list.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:task_me_anything/ui/widgets/task_timer.dart';
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key});
@@ -44,6 +45,8 @@ class _MyHomePageState extends State<MyHomePage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
+            TaskTimer(),
+            const SizedBox(height: 20),
             FutureBuilder<List<Task>>(
               future: taskProvider.getTasks(),
               builder: (context, snapshot) {
