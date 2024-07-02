@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_const_constructors, sort_child_properties_last
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:task_me_anything/models/task.dart';
@@ -23,7 +25,7 @@ class _TaskListState extends State<TaskList> {
 
     return Flexible(
       child: FractionallySizedBox(
-        heightFactor: 0.66,
+        heightFactor: 0.75,
         widthFactor: 0.75,
         child: Column(
           children: [
@@ -113,92 +115,114 @@ class TaskWidget extends StatelessWidget {
             ),
           ),
           IconButton(
-            icon: const Icon(Icons.access_time),
-            onPressed: () {
-              showDialog(
-                context: context,
-                builder: (BuildContext context) {
-                  return AlertDialog(
-                    title: Text(context.loc.timeSpent),
-                    content: Row(
-                      children: [
-                        Expanded(
-                            child: TextField(
-                          controller: timeSpentController,
-                          decoration: InputDecoration(
-                            labelText: context.loc.minutes,
+            icon: const Icon(Icons.star_border),
+            onPressed: () {},
+          ),
+          PopupMenuButton(
+            itemBuilder: (BuildContext context) {
+              return [
+                PopupMenuItem(
+                  child: ListTile(
+                    leading: const Icon(Icons.access_time),
+                    title: Text('Log Time'),
+                  ),
+                  onTap: () {
+                    showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return AlertDialog(
+                          title: Text(context.loc.timeSpent),
+                          content: Row(
+                            children: [
+                              Expanded(
+                                  child: TextField(
+                                controller: timeSpentController,
+                                decoration: InputDecoration(
+                                  labelText: context.loc.minutes,
+                                ),
+                                keyboardType: TextInputType.number,
+                                onSubmitted: (_) async {
+                                  FocusScope.of(context).unfocus();
+                                },
+                              ))
+                            ],
                           ),
-                          keyboardType: TextInputType.number,
-                          onSubmitted: (_) async {
-                            FocusScope.of(context).unfocus();
-                          },
-                        ))
-                      ],
-                    ),
-                    contentPadding: const EdgeInsets.fromLTRB(24, 24, 24, 12),
-                    actions: [
-                      TextButton(
-                        child: Text(context.loc.cancel),
-                        onPressed: () {
-                          Navigator.of(context).pop();
-                        },
-                      ),
-                      TextButton(
-                        child: Text(context.loc.ok),
-                        onPressed: () async {
-                          int timeSpent =
-                              int.tryParse(timeSpentController.text) ?? 0;
-                          Navigator.of(context).pop();
-                          await taskProvider.logTime(
-                              id: task.id!, minutes: timeSpent);
-                        },
-                      ),
-                    ],
-                  );
-                },
-              );
-            },
-          ),
-          IconButton(
-            icon: Icon(
-                task.isDone ? Icons.check_box : Icons.check_box_outline_blank),
-            onPressed: () async {
-              await taskProvider.toggleIsDone(task.id!);
-            },
-          ),
-          IconButton(
-            icon: const Icon(Icons.delete),
-            onPressed: () {
-              showDialog(
-                context: context,
-                builder: (BuildContext context) {
-                  return AlertDialog(
-                    content: Text(context.loc.confirmDelete),
-                    contentPadding: const EdgeInsets.fromLTRB(24, 24, 24, 12),
-                    actions: [
-                      TextButton(
-                        child: Text(context.loc.cancel),
-                        onPressed: () {
-                          Navigator.of(context).pop();
-                        },
-                      ),
-                      TextButton(
-                        child: Text(context.loc.delete),
-                        onPressed: () async {
-                          Navigator.of(context).pop();
-                          await taskProvider.deleteTask(task.id!);
-                          if (!context.mounted) return;
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(
-                              content: Text(context.loc.taskDeleted),
+                          contentPadding:
+                              const EdgeInsets.fromLTRB(24, 24, 24, 12),
+                          actions: [
+                            TextButton(
+                              child: Text(context.loc.cancel),
+                              onPressed: () {
+                                Navigator.of(context).pop();
+                              },
                             ),
-                          );
-                        },
-                      ),
-                    ],
-                  );
-                },
-              );
+                            TextButton(
+                              child: Text(context.loc.ok),
+                              onPressed: () async {
+                                int timeSpent =
+                                    int.tryParse(timeSpentController.text) ?? 0;
+                                Navigator.of(context).pop();
+                                await taskProvider.logTime(
+                                    id: task.id!, minutes: timeSpent);
+                              },
+                            ),
+                          ],
+                        );
+                      },
+                    );
+                  },
+                ),
+                PopupMenuItem(
+                  child: ListTile(
+                    leading: Icon(task.isDone
+                        ? Icons.check_box
+                        : Icons.check_box_outline_blank),
+                    title: Text('Toggle Done'),
+                  ),
+                  onTap: () async {
+                    await taskProvider.toggleIsDone(task.id!);
+                  },
+                ),
+                PopupMenuItem(
+                  child: ListTile(
+                    leading: const Icon(Icons.delete),
+                    title: Text('Delete'),
+                  ),
+                  onTap: () {
+                    showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return AlertDialog(
+                          content: Text(context.loc.confirmDelete),
+                          contentPadding:
+                              const EdgeInsets.fromLTRB(24, 24, 24, 12),
+                          actions: [
+                            TextButton(
+                              child: Text(context.loc.cancel),
+                              onPressed: () {
+                                Navigator.of(context).pop();
+                              },
+                            ),
+                            TextButton(
+                              child: Text(context.loc.delete),
+                              onPressed: () async {
+                                Navigator.of(context).pop();
+                                await taskProvider.deleteTask(task.id!);
+                                if (!context.mounted) return;
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                    content: Text(context.loc.taskDeleted),
+                                  ),
+                                );
+                              },
+                            ),
+                          ],
+                        );
+                      },
+                    );
+                  },
+                ),
+              ];
             },
           ),
         ],

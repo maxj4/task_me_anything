@@ -3,6 +3,8 @@ import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:task_me_anything/services/notification_service.dart';
+import 'package:task_me_anything/utils/extensions/buildcontext/loc.dart';
 
 class TaskTimer extends StatefulWidget {
   const TaskTimer({super.key});
@@ -32,13 +34,17 @@ class _TaskTimerState extends State<TaskTimer> {
   void _startTimer() {
     if (!_isRunning) {
       _isRunning = true;
-      _timer = Timer.periodic(Duration(seconds: 1), (timer) {
+      _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
         int seconds = _getSecondsFromDisplay();
         if (seconds > 0) {
           seconds--;
           _updateDisplay(seconds);
         } else {
           _stopTimer();
+          NotificationService.showAlarmNotification(
+            title: context.loc.notifTitle,
+            body: context.loc.notifBody,
+          );
         }
       });
     }
@@ -75,7 +81,7 @@ class _TaskTimerState extends State<TaskTimer> {
       children: [
         TextFormField(
           controller: _timeController,
-          style: const TextStyle(fontSize: 64, fontWeight: FontWeight.bold),
+          style: const TextStyle(fontSize: 96, fontWeight: FontWeight.bold),
           textAlign: TextAlign.center,
           keyboardType: TextInputType.number,
           inputFormatters: [
@@ -92,23 +98,22 @@ class _TaskTimerState extends State<TaskTimer> {
                   {int? currentLength, int? maxLength, bool? isFocused}) =>
               null,
         ),
-        const SizedBox(height: 20),
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             ElevatedButton(
               onPressed: _startTimer,
-              child: Text('Start'),
+              child: Text(context.loc.start),
             ),
-            SizedBox(width: 20),
+            const SizedBox(width: 20),
             ElevatedButton(
               onPressed: _stopTimer,
-              child: Text('Pause'),
+              child: Text(context.loc.pause),
             ),
-            SizedBox(width: 20),
+            const SizedBox(width: 20),
             ElevatedButton(
               onPressed: _isRunning ? null : _resetTimer,
-              child: Text('Reset'),
+              child: Text(context.loc.reset),
             ),
           ],
         ),
@@ -175,7 +180,7 @@ class _TimeInputFormatter extends TextInputFormatter {
 
     // If all digits were deleted, reset to "00:00"
     if (limitedDigits.isEmpty) {
-      return TextEditingValue(
+      return const TextEditingValue(
         text: "00:00",
         selection: TextSelection.collapsed(offset: 0),
       );

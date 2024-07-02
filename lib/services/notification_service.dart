@@ -11,28 +11,54 @@ class NotificationService {
       iOS: DarwinInitializationSettings(),
     );
 
-    _notificationsPlugin.initialize(initializationSettings);
+    _notificationsPlugin.initialize(
+      initializationSettings,
+      onDidReceiveNotificationResponse: (NotificationResponse details) {
+        if (details.payload == 'dismiss_alarm') {
+          _notificationsPlugin.cancel(1); // Cancel the alarm notification
+        }
+      },
+    );
   }
 
-  static Future<void> showNotification({
+  static Future<void> showAlarmNotification({
     required String title,
     required String body,
+    // String sound = 'alarm_sound',
   }) async {
-    const NotificationDetails notificationDetails = NotificationDetails(
-      android: AndroidNotificationDetails(
-        'channel_id',
-        'channel_name',
-        importance: Importance.max,
-        priority: Priority.high,
+    final List<AndroidNotificationAction> actions = [
+      const AndroidNotificationAction(
+        'dismiss_action',
+        'Dismiss',
+        showsUserInterface: true,
+        cancelNotification: true,
       ),
-      iOS: DarwinNotificationDetails(),
+    ];
+
+    final AndroidNotificationDetails androidPlatformChannelSpecifics =
+        AndroidNotificationDetails(
+      'alarm_channel_id',
+      'Alarm Notifications',
+      importance: Importance.max,
+      priority: Priority.high,
+      // sound: RawResourceAndroidNotificationSound(sound),
+      playSound: true,
+      ongoing: true,
+      autoCancel: false,
+      fullScreenIntent: true,
+      category: AndroidNotificationCategory.alarm,
+      actions: actions,
     );
 
+    final NotificationDetails platformChannelSpecifics =
+        NotificationDetails(android: androidPlatformChannelSpecifics);
+
     await _notificationsPlugin.show(
-      0,
+      1, // TODO Use a unique ID for each alarm notification
       title,
       body,
-      notificationDetails,
+      platformChannelSpecifics,
+      payload: 'dismiss_alarm',
     );
   }
 }

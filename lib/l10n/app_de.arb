@@ -14,5 +14,10 @@
     "delete": "Löschen",
     "confirmDelete": "Diesen Task löschen?",
     "timeSpent": "Zeit protokollieren",
-    "minutes": "Minuten"
+    "minutes": "Minuten",
+    "start": "Start",
+    "pause": "Pause",
+    "reset": "Reset",
+    "notifTitle": "Time's up!",
+    "notifBody": "Time to take a break! :-)"
 }

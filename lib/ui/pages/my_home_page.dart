@@ -45,8 +45,9 @@ class _MyHomePageState extends State<MyHomePage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
+            // ignore: prefer_const_constructors
             TaskTimer(),
-            const SizedBox(height: 20),
+            const SizedBox(height: 32),
             FutureBuilder<List<Task>>(
               future: taskProvider.getTasks(),
               builder: (context, snapshot) {
