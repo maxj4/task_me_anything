@@ -1,5 +1,3 @@
-// ignore_for_file: prefer_const_constructors, sort_child_properties_last
-
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:task_me_anything/models/task.dart';
@@ -8,8 +6,10 @@ import 'package:task_me_anything/utils/extensions/buildcontext/loc.dart';
 
 class TaskList extends StatefulWidget {
   final List<Task> tasks;
+  final int? focussedTaskId;
 
-  const TaskList({super.key, required this.tasks});
+  const TaskList(
+      {super.key, required this.tasks, required this.focussedTaskId});
 
   @override
   State<TaskList> createState() => _TaskListState();
@@ -73,7 +73,10 @@ class _TaskListState extends State<TaskList> {
               child: ListView.builder(
                 itemCount: widget.tasks.length,
                 itemBuilder: (context, index) {
-                  return TaskWidget(task: widget.tasks[index]);
+                  return TaskWidget(
+                    task: widget.tasks[index],
+                    focussedTaskId: widget.focussedTaskId,
+                  );
                 },
               ),
             ),
@@ -86,17 +89,20 @@ class _TaskListState extends State<TaskList> {
 
 class TaskWidget extends StatelessWidget {
   final Task task;
+  final int? focussedTaskId;
   final TextEditingController timeSpentController = TextEditingController();
 
   TaskWidget({
     super.key,
     required this.task,
+    required this.focussedTaskId,
   });
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final TaskProvider taskProvider = Provider.of<TaskProvider>(context);
+    final bool isFocussed = task.id == focussedTaskId;
 
     return Container(
       decoration: taskListBoxDecoration(theme),
@@ -106,7 +112,7 @@ class TaskWidget extends StatelessWidget {
         children: [
           Expanded(
             child: Text(
-              '#${task.id} ${task.content} ${task.timeSpentInMinutes}min',
+              '#${task.id} ${task.content} ${task.timeSpentInMinutes} min',
               style: theme.textTheme.bodyLarge!.copyWith(
                   decoration: task.isDone ? TextDecoration.lineThrough : null,
                   color: task.isDone
@@ -115,8 +121,11 @@ class TaskWidget extends StatelessWidget {
             ),
           ),
           IconButton(
-            icon: const Icon(Icons.star_border),
-            onPressed: () {},
+            icon: Icon(isFocussed ? Icons.star : Icons.star_border),
+            onPressed: () async {
+              int id = isFocussed ? -1 : task.id!;
+              await taskProvider.setFocussedTask(id);
+            },
           ),
           PopupMenuButton(
             itemBuilder: (BuildContext context) {

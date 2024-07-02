@@ -14,6 +14,13 @@ class TaskRepositoryImpl implements TaskRepository {
   }
 
   @override
+  Future<Task?> getTaskById(int id) async {
+    final task = await _dbHelper.queryById(id);
+    if (task.isEmpty) return null;
+    return Task.fromMap(task);
+  }
+
+  @override
   Future<void> addTask(Task task) async {
     await _dbHelper.insert(task.toMap());
   }

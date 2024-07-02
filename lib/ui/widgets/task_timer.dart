@@ -3,6 +3,9 @@ import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:provider/provider.dart';
+import 'package:task_me_anything/models/task.dart';
+import 'package:task_me_anything/providers/task_provider.dart';
 import 'package:task_me_anything/services/notification_service.dart';
 import 'package:task_me_anything/utils/extensions/buildcontext/loc.dart';
 
@@ -31,10 +34,11 @@ class _TaskTimerState extends State<TaskTimer> {
     super.dispose();
   }
 
-  void _startTimer() {
+  void _startTimer(TaskProvider taskProvider, int focussedTaskId) {
     if (!_isRunning) {
       _isRunning = true;
-      _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
+      int initialMinutes = _getSecondsFromDisplay() ~/ 60;
+      _timer = Timer.periodic(const Duration(seconds: 1), (timer) async {
         int seconds = _getSecondsFromDisplay();
         if (seconds > 0) {
           seconds--;
@@ -45,6 +49,10 @@ class _TaskTimerState extends State<TaskTimer> {
             title: context.loc.notifTitle,
             body: context.loc.notifBody,
           );
+          if (focussedTaskId != -1) {
+            await taskProvider.logTime(
+                id: focussedTaskId, minutes: initialMinutes);
+          }
         }
       });
     }
@@ -77,6 +85,8 @@ class _TaskTimerState extends State<TaskTimer> {
 
   @override
   Widget build(BuildContext context) {
+    final TaskProvider taskProvider = Provider.of<TaskProvider>(context);
+
     return Column(
       children: [
         TextFormField(
@@ -102,7 +112,11 @@ class _TaskTimerState extends State<TaskTimer> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             ElevatedButton(
-              onPressed: _startTimer,
+              onPressed: () async {
+                final Task? task = await taskProvider.getFocussedTask();
+                final int id = task?.id ?? -1;
+                _startTimer(taskProvider, id);
+              },
               child: Text(context.loc.start),
             ),
             const SizedBox(width: 20),

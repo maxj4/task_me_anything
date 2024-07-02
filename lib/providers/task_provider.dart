@@ -41,4 +41,13 @@ class TaskProvider extends ChangeNotifier {
     await _taskService.logTime(id: id, minutes: minutes);
     await _loadTasks();
   }
+
+  Future<void> setFocussedTask(int id) async {
+    await _taskService.setFocussedTask(id);
+    await _loadTasks();
+  }
+
+  Future<Task?> getFocussedTask() async {
+    return await _taskService.getFocussedTask();
+  }
 }
