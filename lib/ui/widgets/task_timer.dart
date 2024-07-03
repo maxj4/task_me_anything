@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:isolate';
 import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
@@ -18,8 +19,9 @@ class TaskTimer extends StatefulWidget {
 
 class _TaskTimerState extends State<TaskTimer> {
   late TextEditingController _timeController;
-  Timer? _timer;
   bool _isRunning = false;
+  Isolate? _timerIsolate;
+  ReceivePort? _receivePort;
 
   @override
   void initState() {
@@ -29,38 +31,63 @@ class _TaskTimerState extends State<TaskTimer> {
 
   @override
   void dispose() {
-    _timer?.cancel();
+    _stopTimer();
     _timeController.dispose();
     super.dispose();
   }
 
-  void _startTimer(TaskProvider taskProvider, int focussedTaskId) {
+  void _startTimer(TaskProvider taskProvider, int focussedTaskId) async {
     if (!_isRunning) {
       _isRunning = true;
-      int initialMinutes = _getSecondsFromDisplay() ~/ 60;
-      _timer = Timer.periodic(const Duration(seconds: 1), (timer) async {
-        int seconds = _getSecondsFromDisplay();
-        if (seconds > 0) {
-          seconds--;
-          _updateDisplay(seconds);
-        } else {
+      int initialSeconds = _getSecondsFromDisplay();
+      int initialMinutes = initialSeconds ~/ 60;
+
+      _receivePort = ReceivePort();
+      _timerIsolate = await Isolate.spawn(
+        _runTimer,
+        [_receivePort!.sendPort, initialSeconds],
+      );
+
+      _receivePort!.listen((message) {
+        if (message is int) {
+          setState(() {
+            _updateDisplay(message);
+          });
+        } else if (message == 'TIMER_FINISHED') {
           _stopTimer();
           NotificationService.showAlarmNotification(
             title: context.loc.notifTitle,
             body: context.loc.notifBody,
           );
           if (focussedTaskId != -1) {
-            await taskProvider.logTime(
-                id: focussedTaskId, minutes: initialMinutes);
+            taskProvider.logTime(id: focussedTaskId, minutes: initialMinutes);
           }
         }
       });
     }
   }
 
+  static void _runTimer(List<dynamic> args) {
+    SendPort sendPort = args[0];
+    int remainingSeconds = args[1];
+
+    Timer.periodic(const Duration(seconds: 1), (timer) {
+      if (remainingSeconds > 0) {
+        remainingSeconds--;
+        sendPort.send(remainingSeconds);
+      } else {
+        timer.cancel();
+        sendPort.send('TIMER_FINISHED');
+      }
+    });
+  }
+
   void _stopTimer() {
     _isRunning = false;
-    _timer?.cancel();
+    _timerIsolate?.kill(priority: Isolate.immediate);
+    _timerIsolate = null;
+    _receivePort?.close();
+    _receivePort = null;
   }
 
   void _resetTimer() {

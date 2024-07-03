@@ -48,6 +48,7 @@ class NotificationService {
       fullScreenIntent: true,
       category: AndroidNotificationCategory.alarm,
       actions: actions,
+      visibility: NotificationVisibility.public,
     );
 
     final NotificationDetails platformChannelSpecifics =
