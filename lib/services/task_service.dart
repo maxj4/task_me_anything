@@ -12,6 +12,9 @@ class TaskService {
 
   Future<void> addTask(Task task) => _taskRepository.addTask(task);
 
+  Future<void> editTaskContent(int id, String content) =>
+      _taskRepository.editTaskContent(id, content);
+
   Future<void> deleteTask(int id) => _taskRepository.deleteTask(id);
 
   Future<void> toggleIsDone(int id) => _taskRepository.toggleIsDone(id);

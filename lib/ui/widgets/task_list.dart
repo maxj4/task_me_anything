@@ -91,6 +91,7 @@ class TaskWidget extends StatelessWidget {
   final Task task;
   final int? focussedTaskId;
   final TextEditingController timeSpentController = TextEditingController();
+  final TextEditingController _editTaskController = TextEditingController();
 
   TaskWidget({
     super.key,
@@ -103,6 +104,7 @@ class TaskWidget extends StatelessWidget {
     final theme = Theme.of(context);
     final TaskProvider taskProvider = Provider.of<TaskProvider>(context);
     final bool isFocussed = task.id == focussedTaskId;
+    _editTaskController.text = task.content;
 
     return Container(
       decoration: taskListBoxDecoration(theme),
@@ -135,7 +137,7 @@ class TaskWidget extends StatelessWidget {
           ),
           Expanded(
             child: Text(
-              '${task.content}',
+              task.content,
               style: theme.textTheme.bodyLarge!.copyWith(
                   decoration: task.isDone ? TextDecoration.lineThrough : null,
                   color: task.isDone
@@ -213,6 +215,50 @@ class TaskWidget extends StatelessWidget {
                   ),
                   onTap: () async {
                     await taskProvider.toggleIsDone(task.id!);
+                  },
+                ),
+                PopupMenuItem(
+                  child: const ListTile(
+                    leading: Icon(Icons.edit),
+                    title: Text('Edit'),
+                  ),
+                  onTap: () {
+                    showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return AlertDialog(
+                          title: Text('context.loc.editTask'),
+                          content: TextField(
+                            controller: _editTaskController,
+                            decoration: InputDecoration(
+                              labelText: 'context.loc.content',
+                            ),
+                            onSubmitted: (content) async {
+                              // _editTaskController.text = content;
+                              FocusScope.of(context).unfocus();
+                            },
+                          ),
+                          contentPadding:
+                              const EdgeInsets.fromLTRB(24, 24, 24, 12),
+                          actions: [
+                            TextButton(
+                              child: Text(context.loc.cancel),
+                              onPressed: () {
+                                Navigator.of(context).pop();
+                              },
+                            ),
+                            TextButton(
+                              child: Text('context.loc.save'),
+                              onPressed: () async {
+                                await taskProvider.editTaskContent(
+                                    task.id!, _editTaskController.text);
+                                Navigator.of(context).pop();
+                              },
+                            ),
+                          ],
+                        );
+                      },
+                    );
                   },
                 ),
                 PopupMenuItem(

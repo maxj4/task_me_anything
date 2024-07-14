@@ -26,6 +26,13 @@ class TaskRepositoryImpl implements TaskRepository {
   }
 
   @override
+  Future<void> editTaskContent(int id, String content) async {
+    final task = await _dbHelper.queryById(id);
+    await _dbHelper
+        .update(Task.fromMap(task).copyWith(content: content).toMap());
+  }
+
+  @override
   Future<void> deleteTask(int id) async {
     await _dbHelper.delete(id);
   }

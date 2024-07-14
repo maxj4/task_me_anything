@@ -34,6 +34,11 @@ class TaskProvider extends ChangeNotifier {
     await _loadTasks();
   }
 
+  Future<void> editTaskContent(int id, String content) async {
+    await _taskService.editTaskContent(id, content);
+    await _loadTasks();
+  }
+
   Future<void> deleteTask(int id) async {
     await _taskService.deleteTask(id);
     await _loadTasks();
