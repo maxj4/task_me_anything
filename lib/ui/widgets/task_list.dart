@@ -110,9 +110,32 @@ class TaskWidget extends StatelessWidget {
       padding: const EdgeInsets.fromLTRB(16, 8, 8, 8),
       child: Row(
         children: [
+          Column(
+            children: [
+              Text('#${task.id}'),
+              Row(
+                children: [
+                  const Icon(
+                    Icons.access_time,
+                    size: 12,
+                  ),
+                  const SizedBox(
+                    width: 1,
+                  ),
+                  Text(
+                    _getDisplayTime(task.timeSpentInMinutes),
+                    style: theme.textTheme.bodySmall,
+                  ),
+                ],
+              ),
+            ],
+          ),
+          const SizedBox(
+            width: 8,
+          ),
           Expanded(
             child: Text(
-              '#${task.id} ${task.content} ${task.timeSpentInMinutes} min',
+              '${task.content}',
               style: theme.textTheme.bodyLarge!.copyWith(
                   decoration: task.isDone ? TextDecoration.lineThrough : null,
                   color: task.isDone
@@ -131,8 +154,8 @@ class TaskWidget extends StatelessWidget {
             itemBuilder: (BuildContext context) {
               return [
                 PopupMenuItem(
-                  child: ListTile(
-                    leading: const Icon(Icons.access_time),
+                  child: const ListTile(
+                    leading: Icon(Icons.access_time),
                     title: Text('Log Time'),
                   ),
                   onTap: () {
@@ -186,15 +209,15 @@ class TaskWidget extends StatelessWidget {
                     leading: Icon(task.isDone
                         ? Icons.check_box
                         : Icons.check_box_outline_blank),
-                    title: Text('Toggle Done'),
+                    title: const Text('Toggle Done'),
                   ),
                   onTap: () async {
                     await taskProvider.toggleIsDone(task.id!);
                   },
                 ),
                 PopupMenuItem(
-                  child: ListTile(
-                    leading: const Icon(Icons.delete),
+                  child: const ListTile(
+                    leading: Icon(Icons.delete),
                     title: Text('Delete'),
                   ),
                   onTap: () {
@@ -252,4 +275,14 @@ BoxDecoration taskListBoxDecoration(ThemeData theme) {
       ),
     ],
   );
+}
+
+String _getDisplayTime(int minutes) {
+  if (minutes < 60) {
+    return '$minutes\'\'';
+  } else {
+    int hours = minutes ~/ 60;
+    int remainingMinutes = minutes % 60;
+    return '$hours\' $remainingMinutes\'\'';
+  }
 }
