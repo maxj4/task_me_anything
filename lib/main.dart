@@ -1,3 +1,4 @@
+import 'package:android_alarm_manager_plus/android_alarm_manager_plus.dart';
 import 'package:task_me_anything/providers/locale_provider.dart';
 import 'package:task_me_anything/providers/task_provider.dart';
 import 'package:task_me_anything/providers/theme_provider.dart';
@@ -11,9 +12,11 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
 import 'package:task_me_anything/utils/db_helper.dart';
 
-void main() {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await AndroidAlarmManager.initialize();
   NotificationService.initialize();
+
   final DbHelper dbHelper = DbHelper();
   final TaskRepository taskRepository = TaskRepositoryImpl(dbHelper);
   final TaskService taskService = TaskService(taskRepository);

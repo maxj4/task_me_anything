@@ -1,14 +1,15 @@
 import 'dart:async';
-import 'dart:isolate';
-import 'dart:math' as math;
 
+import 'package:android_alarm_manager_plus/android_alarm_manager_plus.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:task_me_anything/models/task.dart';
 import 'package:task_me_anything/providers/task_provider.dart';
 import 'package:task_me_anything/services/notification_service.dart';
 import 'package:task_me_anything/utils/extensions/buildcontext/loc.dart';
+import 'package:task_me_anything/utils/time_input_formatter.dart';
 
 class TaskTimer extends StatefulWidget {
   const TaskTimer({super.key});
@@ -17,83 +18,134 @@ class TaskTimer extends StatefulWidget {
   State<TaskTimer> createState() => _TaskTimerState();
 }
 
-class _TaskTimerState extends State<TaskTimer> {
+class _TaskTimerState extends State<TaskTimer> with WidgetsBindingObserver {
+  static const String scheduledTimeKey = 'scheduledTime';
+  // always use the same id for the alarm to avoid multiple alarms
+  static const int alarmId = 0;
   late TextEditingController _timeController;
+  late SharedPreferences _prefs;
+  Timer? _timer;
+  int? _scheduledTime;
   bool _isRunning = false;
-  Isolate? _timerIsolate;
-  ReceivePort? _receivePort;
 
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addObserver(this);
+    _requestAlarmPermission();
     _timeController = TextEditingController(text: '20:00');
+    _initPrefsAndUpdate();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    super.didChangeAppLifecycleState(state);
+    switch (state) {
+      case AppLifecycleState.paused:
+        _timer?.cancel();
+        break;
+      case AppLifecycleState.resumed:
+        _scheduledTime = _prefs.getInt(scheduledTimeKey);
+        _updateDisplayAndRuntTimer();
+        break;
+      default:
+        break;
+    }
   }
 
   @override
   void dispose() {
-    _stopTimer();
+    WidgetsBinding.instance.removeObserver(this);
+    _isRunning = false;
     _timeController.dispose();
     super.dispose();
   }
 
-  void _startTimer(TaskProvider taskProvider, int focussedTaskId) async {
-    if (!_isRunning) {
-      _isRunning = true;
-      int initialSeconds = _getSecondsFromDisplay();
-      int initialMinutes = initialSeconds ~/ 60;
-
-      _receivePort = ReceivePort();
-      _timerIsolate = await Isolate.spawn(
-        _runTimer,
-        [_receivePort!.sendPort, initialSeconds],
-      );
-
-      _receivePort!.listen((message) {
-        if (message is int) {
-          setState(() {
-            _updateDisplay(message);
-          });
-        } else if (message == 'TIMER_FINISHED') {
-          _stopTimer();
-          NotificationService.showAlarmNotification(
-            title: context.loc.notifTitle,
-            body: context.loc.notifBody,
-          );
-          if (focussedTaskId != -1) {
-            taskProvider.logTime(id: focussedTaskId, minutes: initialMinutes);
-          }
-        }
-      });
+  Future<void> _requestAlarmPermission() async {
+    if (await Permission.scheduleExactAlarm.isDenied) {
+      final status = await Permission.scheduleExactAlarm.request();
+      if (status.isDenied) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+              content: Text(
+                  'Alarm permission is required for the timer to work properly')),
+        );
+      }
     }
   }
 
-  static void _runTimer(List<dynamic> args) {
-    SendPort sendPort = args[0];
-    int remainingSeconds = args[1];
+  void _initPrefsAndUpdate() async {
+    _prefs = await SharedPreferences.getInstance();
+    _scheduledTime = _prefs.getInt(scheduledTimeKey);
+    _updateDisplayAndRuntTimer();
+  }
 
-    Timer.periodic(const Duration(seconds: 1), (timer) {
-      if (remainingSeconds > 0) {
-        remainingSeconds--;
-        sendPort.send(remainingSeconds);
-      } else {
-        timer.cancel();
-        sendPort.send('TIMER_FINISHED');
+  void _updateDisplayAndRuntTimer() {
+    int? seconds = _scheduledTime != null
+        ? (_scheduledTime! - DateTime.now().millisecondsSinceEpoch) ~/ 1000
+        : null;
+
+    if (seconds != null) {
+      if (seconds < 0) {
+        seconds = 0;
       }
-    });
+      _updateDisplay(seconds);
+      _runTimer(seconds);
+    }
   }
 
-  void _stopTimer() {
-    _isRunning = false;
-    _timerIsolate?.kill(priority: Isolate.immediate);
-    _timerIsolate = null;
-    _receivePort?.close();
-    _receivePort = null;
+  void _updateDisplay(int totalSeconds) {
+    int minutes = totalSeconds ~/ 60;
+    int seconds = totalSeconds % 60;
+    _timeController.text =
+        '${minutes.toString().padLeft(2, '0')}:${seconds.toString().padLeft(2, '0')}';
   }
 
-  void _resetTimer() {
-    if (!_isRunning) {
-      _stopTimer();
-      _updateDisplay(20 * 60);
+  void _runTimer(int remainingTimeInSeconds) {
+    _isRunning = true;
+    _timer = Timer.periodic(
+      const Duration(seconds: 1),
+      (timer) {
+        if (remainingTimeInSeconds > 0) {
+          remainingTimeInSeconds--;
+          setState(() {
+            _updateDisplay(remainingTimeInSeconds);
+          });
+        } else {
+          _isRunning = false;
+          _timer?.cancel();
+        }
+      },
+    );
+  }
+
+  Future<void> _setAlarmAndRunTimer(
+      TaskProvider taskProvider, int focussedTaskId) async {
+    if (await Permission.scheduleExactAlarm.isGranted) {
+      if (!_isRunning) {
+        _isRunning = true;
+        int initialSeconds = _getSecondsFromDisplay();
+        final DateTime scheduledTime =
+            DateTime.now().add(Duration(seconds: initialSeconds));
+
+        _prefs.setInt(scheduledTimeKey, scheduledTime.millisecondsSinceEpoch);
+
+        await AndroidAlarmManager.oneShotAt(
+          scheduledTime,
+          alarmId,
+          notifyAlarmFinished,
+          exact: true,
+          wakeup: true,
+          rescheduleOnReboot: true,
+        );
+
+        _runTimer(initialSeconds);
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+              content: Text('Alarm permission is required to set the timer')),
+        );
+      }
     }
   }
 
@@ -103,11 +155,18 @@ class _TaskTimerState extends State<TaskTimer> {
     return int.parse(parts[0]) * 60 + int.parse(parts[1]);
   }
 
-  void _updateDisplay(int totalSeconds) {
-    int minutes = totalSeconds ~/ 60;
-    int seconds = totalSeconds % 60;
-    _timeController.text =
-        '${minutes.toString().padLeft(2, '0')}:${seconds.toString().padLeft(2, '0')}';
+  void _pauseTimer() {
+    _isRunning = false;
+    _timer?.cancel();
+    AndroidAlarmManager.cancel(alarmId);
+    _prefs.remove(scheduledTimeKey);
+  }
+
+  void _resetTimer() {
+    if (!_isRunning) {
+      _pauseTimer();
+      _updateDisplay(20 * 60);
+    }
   }
 
   @override
@@ -122,7 +181,7 @@ class _TaskTimerState extends State<TaskTimer> {
           textAlign: TextAlign.center,
           keyboardType: TextInputType.number,
           inputFormatters: [
-            _TimeInputFormatter(),
+            TimeInputFormatter(),
           ],
           decoration: InputDecoration(
             border: InputBorder.none,
@@ -139,16 +198,18 @@ class _TaskTimerState extends State<TaskTimer> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             ElevatedButton(
-              onPressed: () async {
-                final Task? task = await taskProvider.getFocussedTask();
-                final int id = task?.id ?? -1;
-                _startTimer(taskProvider, id);
-              },
+              onPressed: _isRunning || _getSecondsFromDisplay() == 0
+                  ? null
+                  : () async {
+                      final Task? task = await taskProvider.getFocussedTask();
+                      final int id = task?.id ?? -1;
+                      _setAlarmAndRunTimer(taskProvider, id);
+                    },
               child: Text(context.loc.start),
             ),
             const SizedBox(width: 20),
             ElevatedButton(
-              onPressed: _stopTimer,
+              onPressed: _isRunning ? _pauseTimer : null,
               child: Text(context.loc.pause),
             ),
             const SizedBox(width: 20),
@@ -163,73 +224,13 @@ class _TaskTimerState extends State<TaskTimer> {
   }
 }
 
-class _TimeInputFormatter extends TextInputFormatter {
-  @override
-  TextEditingValue formatEditUpdate(
-      TextEditingValue oldValue, TextEditingValue newValue) {
-    String newText = newValue.text;
-    int selectionIndex = newValue.selection.end;
+@pragma('vm:entry-point')
+void notifyAlarmFinished() async {
+  NotificationService.showAlarmNotification(
+    title: 'Timer finished!',
+    body: 'Time to take a break! 🎉',
+  );
 
-    // Handle deletion
-    if (newText.length < oldValue.text.length) {
-      // Determine which digit was deleted
-      int deletedIndex = oldValue.selection.end - 1;
-      if (deletedIndex >= 0) {
-        // Skip colon when deleting
-        if (deletedIndex == 2) {
-          deletedIndex = 1;
-        }
-        // Replace the deleted digit with '0'
-        String updatedText =
-            oldValue.text.replaceRange(deletedIndex, deletedIndex + 1, '0');
-
-        // Adjust cursor position for deletion
-        if (deletedIndex >= 3) {
-          // If deleting digit after colon
-          selectionIndex = deletedIndex;
-        } else {
-          // If deleting digit before colon
-          selectionIndex = deletedIndex;
-        }
-
-        return TextEditingValue(
-          text: updatedText,
-          selection: TextSelection.collapsed(offset: selectionIndex),
-        );
-      }
-    }
-
-    // Remove all non-digit characters
-    final digitsOnly = newText.replaceAll(RegExp(r'[^0-9]'), '');
-
-    // Limit to 4 digits
-    final limitedDigits =
-        digitsOnly.substring(0, math.min(4, digitsOnly.length));
-
-    // Format the time
-    final formattedValue = StringBuffer();
-    for (int i = 0; i < 4; i++) {
-      if (i == 2) formattedValue.write(':');
-      formattedValue.write(i < limitedDigits.length ? limitedDigits[i] : '0');
-    }
-
-    // Adjust cursor position for insertion
-    if (newText.length > oldValue.text.length) {
-      if (selectionIndex > 2) selectionIndex++;
-      if (selectionIndex > 5) selectionIndex = 5;
-    }
-
-    // If all digits were deleted, reset to "00:00"
-    if (limitedDigits.isEmpty) {
-      return const TextEditingValue(
-        text: "00:00",
-        selection: TextSelection.collapsed(offset: 0),
-      );
-    }
-
-    return TextEditingValue(
-      text: formattedValue.toString(),
-      selection: TextSelection.collapsed(offset: selectionIndex),
-    );
-  }
+  final SharedPreferences prefs = await SharedPreferences.getInstance();
+  prefs.remove('scheduledTime');
 }

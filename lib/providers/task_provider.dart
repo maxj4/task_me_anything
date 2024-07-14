@@ -6,8 +6,15 @@ class TaskProvider extends ChangeNotifier {
   final TaskService _taskService;
   List<Task> _tasks = [];
 
-  TaskProvider(this._taskService) {
+  TaskProvider._(this._taskService) {
     _loadTasks();
+  }
+
+  static TaskProvider? _instance;
+
+  factory TaskProvider(TaskService taskService) {
+    _instance ??= TaskProvider._(taskService);
+    return _instance!;
   }
 
   List<Task> get tasks => _tasks;
