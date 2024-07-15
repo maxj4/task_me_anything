@@ -156,9 +156,9 @@ class TaskWidget extends StatelessWidget {
             itemBuilder: (BuildContext context) {
               return [
                 PopupMenuItem(
-                  child: const ListTile(
-                    leading: Icon(Icons.access_time),
-                    title: Text('Log Time'),
+                  child: ListTile(
+                    leading: const Icon(Icons.access_time),
+                    title: Text(context.loc.logTime),
                   ),
                   onTap: () {
                     showDialog(
@@ -211,28 +211,27 @@ class TaskWidget extends StatelessWidget {
                     leading: Icon(task.isDone
                         ? Icons.check_box
                         : Icons.check_box_outline_blank),
-                    title: const Text('Toggle Done'),
+                    title: Text(task.isDone
+                        ? context.loc.markUndone
+                        : context.loc.markDone),
                   ),
                   onTap: () async {
                     await taskProvider.toggleIsDone(task.id!);
                   },
                 ),
                 PopupMenuItem(
-                  child: const ListTile(
-                    leading: Icon(Icons.edit),
-                    title: Text('Edit'),
+                  child: ListTile(
+                    leading: const Icon(Icons.edit),
+                    title: Text(context.loc.edit),
                   ),
                   onTap: () {
                     showDialog(
                       context: context,
                       builder: (BuildContext context) {
                         return AlertDialog(
-                          title: Text('context.loc.editTask'),
+                          title: Text(context.loc.editTask),
                           content: TextField(
                             controller: _editTaskController,
-                            decoration: InputDecoration(
-                              labelText: 'context.loc.content',
-                            ),
                             onSubmitted: (content) async {
                               // _editTaskController.text = content;
                               FocusScope.of(context).unfocus();
@@ -248,10 +247,11 @@ class TaskWidget extends StatelessWidget {
                               },
                             ),
                             TextButton(
-                              child: Text('context.loc.save'),
+                              child: Text(context.loc.save),
                               onPressed: () async {
                                 await taskProvider.editTaskContent(
                                     task.id!, _editTaskController.text);
+                                if (!context.mounted) return;
                                 Navigator.of(context).pop();
                               },
                             ),
@@ -262,9 +262,9 @@ class TaskWidget extends StatelessWidget {
                   },
                 ),
                 PopupMenuItem(
-                  child: const ListTile(
-                    leading: Icon(Icons.delete),
-                    title: Text('Delete'),
+                  child: ListTile(
+                    leading: const Icon(Icons.delete),
+                    title: Text(context.loc.delete),
                   ),
                   onTap: () {
                     showDialog(

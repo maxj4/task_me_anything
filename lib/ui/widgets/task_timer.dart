@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'dart:async';
 
 import 'package:android_alarm_manager_plus/android_alarm_manager_plus.dart';
@@ -65,10 +67,9 @@ class _TaskTimerState extends State<TaskTimer> with WidgetsBindingObserver {
     if (await Permission.scheduleExactAlarm.isDenied) {
       final status = await Permission.scheduleExactAlarm.request();
       if (status.isDenied) {
+        if (!context.mounted) return;
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-              content: Text(
-                  'Alarm permission is required for the timer to work properly')),
+          SnackBar(content: Text(context.loc.alarmPermissionDenied)),
         );
       }
     }
@@ -142,8 +143,7 @@ class _TaskTimerState extends State<TaskTimer> with WidgetsBindingObserver {
         _runTimer(initialSeconds);
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-              content: Text('Alarm permission is required to set the timer')),
+          SnackBar(content: Text(context.loc.alarmPermissionDenied)),
         );
       }
     }

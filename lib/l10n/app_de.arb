@@ -19,5 +19,12 @@
     "pause": "Pause",
     "reset": "Reset",
     "notifTitle": "Time's up!",
-    "notifBody": "Time to take a break! :-)"
+    "notifBody": "Time to take a break! :-)",
+    "save": "Speichern",
+    "editTask": "Aufgabe bearbeiten",
+    "edit": "Bearbeiten",
+    "markDone": "Erledigt",
+    "markUndone": "Nicht erledigt",
+    "logTime": "Zeit protokollieren",
+    "alarmPermissionDenied": "Alarm permission is required for the timer to work properly."
 }

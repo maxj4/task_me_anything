@@ -24,7 +24,6 @@ class NotificationService {
   static Future<void> showAlarmNotification({
     required String title,
     required String body,
-    // String sound = 'alarm_sound',
   }) async {
     final List<AndroidNotificationAction> actions = [
       const AndroidNotificationAction(
@@ -41,7 +40,6 @@ class NotificationService {
       'Alarm Notifications',
       importance: Importance.max,
       priority: Priority.high,
-      // sound: RawResourceAndroidNotificationSound(sound),
       playSound: true,
       ongoing: true,
       autoCancel: false,
@@ -55,7 +53,7 @@ class NotificationService {
         NotificationDetails(android: androidPlatformChannelSpecifics);
 
     await _notificationsPlugin.show(
-      1, // TODO Use a unique ID for each alarm notification
+      1,
       title,
       body,
       platformChannelSpecifics,
