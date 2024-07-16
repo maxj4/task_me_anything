@@ -1,6 +1,6 @@
 {
-    "name": "basic_flutter_template",
-    "short_name": "basic_flutter_template",
+    "name": "task_me_anything",
+    "short_name": "task_me_anything",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",
