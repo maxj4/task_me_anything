@@ -25,6 +25,30 @@ class _MyHomePageState extends State<MyHomePage> {
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
+        leading: IconButton(
+          icon: Icon(Icons.info_outline),
+          onPressed: () {
+            // open dialog
+            showDialog(
+              context: context,
+              builder: (context) {
+                return AlertDialog(
+                  title: Text('About'),
+                  content: Text(
+                      'Task Me Anything is a simple task manager app that helps you focus on one task at a time.\nThis is a Hobby project by Max Jonas (https://github.com/maxj4).\n\nThe App Icon is provided by Flaticon Roundicons Premium (https://www.flaticon.com/free-icon/hourglass_615290?term=hourglass&related_id=615290).'),
+                  actions: [
+                    TextButton(
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                      child: Text('Close'),
+                    ),
+                  ],
+                );
+              },
+            );
+          },
+        ),
         actions: [
           IconButton(
             icon: Icon(
