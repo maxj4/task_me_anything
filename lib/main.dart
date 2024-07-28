@@ -12,8 +12,6 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
 import 'package:task_me_anything/utils/db_helper.dart';
 
-// icon: <a href="https://www.flaticon.com/free-icons/time-and-date" title="time and date icons">Time and date icons created by Roundicons Premium - Flaticon</a>
-// https://www.flaticon.com/free-icon/hourglass_615290?term=hourglass&related_id=615290 TODO add to about page
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await AndroidAlarmManager.initialize();

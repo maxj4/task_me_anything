@@ -1,3 +1,4 @@
+import 'package:flutter/gestures.dart';
 import 'package:task_me_anything/providers/task_provider.dart';
 import 'package:task_me_anything/providers/theme_provider.dart';
 import 'package:task_me_anything/models/task.dart';
@@ -5,6 +6,8 @@ import 'package:task_me_anything/ui/widgets/task_list.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:task_me_anything/ui/widgets/task_timer.dart';
+import 'package:task_me_anything/utils/extensions/buildcontext/loc.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key});
@@ -16,6 +19,14 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   bool displayDone = false;
 
+  Future<void> _launchURL(Uri url) async {
+    if (await canLaunchUrl(url)) {
+      await launchUrl(url);
+    } else {
+      throw ('Could not launch $url');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     bool isDark = Theme.of(context).brightness == Brightness.dark;
@@ -26,22 +37,56 @@ class _MyHomePageState extends State<MyHomePage> {
         backgroundColor: Colors.transparent,
         elevation: 0,
         leading: IconButton(
-          icon: Icon(Icons.info_outline),
+          icon: const Icon(Icons.info_outline),
           onPressed: () {
-            // open dialog
             showDialog(
               context: context,
               builder: (context) {
                 return AlertDialog(
-                  title: Text('About'),
-                  content: Text(
-                      'Task Me Anything is a simple task manager app that helps you focus on one task at a time.\nThis is a Hobby project by Max Jonas (https://github.com/maxj4).\n\nThe App Icon is provided by Flaticon Roundicons Premium (https://www.flaticon.com/free-icon/hourglass_615290?term=hourglass&related_id=615290).'),
+                  title: Text(context.loc.aboutTitle),
+                  content: RichText(
+                    text: TextSpan(
+                      style: Theme.of(context).textTheme.bodySmall,
+                      children: [
+                        TextSpan(
+                          text: context.loc.aboutContent,
+                        ),
+                        TextSpan(
+                          text: 'GitHub',
+                          style: const TextStyle(
+                              decoration: TextDecoration.underline),
+                          recognizer: TapGestureRecognizer()
+                            ..onTap = () {
+                              _launchURL(Uri(
+                                scheme: 'https',
+                                host: 'github.com',
+                                path: '/maxj4',
+                              ));
+                            },
+                        ),
+                        TextSpan(text: context.loc.aboutIconCredits),
+                        TextSpan(
+                          text: ('Flaticon Roundicons Premium.'),
+                          style: const TextStyle(
+                              decoration: TextDecoration.underline),
+                          recognizer: TapGestureRecognizer()
+                            ..onTap = () {
+                              _launchURL(Uri(
+                                  scheme: 'https',
+                                  host: 'www.flaticon.com',
+                                  path: '/free-icon/hourglass_615290',
+                                  query: 'term=hourglass&related_id=615290'));
+                            },
+                        )
+                      ],
+                    ),
+                  ),
                   actions: [
                     TextButton(
                       onPressed: () {
                         Navigator.pop(context);
                       },
-                      child: Text('Close'),
+                      child: Text(context.loc.close),
                     ),
                   ],
                 );

@@ -12,6 +12,7 @@
     "ok": "Ok",
     "cancel": "Abbrechen",
     "delete": "Löschen",
+    "close": "Schließen",
     "confirmDelete": "Diesen Task löschen?",
     "timeSpent": "Zeit protokollieren",
     "minutes": "Minuten",
@@ -26,5 +27,8 @@
     "markDone": "Erledigt",
     "markUndone": "Nicht erledigt",
     "logTime": "Zeit protokollieren",
-    "alarmPermissionDenied": "Alarm permission is required for the timer to work properly."
+    "alarmPermissionDenied": "Alarm permission is required for the timer to work properly.",
+    "aboutTitle": "About",
+    "aboutContent": "Task Me Anything is a simple task manager app that helps you focus on one task at a time.\nThis is a Hobby project by Max Jonas (",
+    "aboutIconCredits": ").\n\nThe App Icon is provided by "
 }
