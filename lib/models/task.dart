@@ -1,3 +1,5 @@
+import 'package:flutter/material.dart';
+
 class Task {
   final int? id;
   final String content;
@@ -42,4 +44,15 @@ class Task {
       timeSpentInMinutes: timeSpentInMinutes ?? this.timeSpentInMinutes,
     );
   }
+}
+
+@immutable
+class TaskData {
+  final List<Task> tasks;
+  final int focussedTaskId;
+
+  const TaskData({
+    required this.tasks,
+    required this.focussedTaskId,
+  });
 }

@@ -62,4 +62,11 @@ class TaskProvider extends ChangeNotifier {
   Future<Task?> getFocussedTask() async {
     return await _taskService.getFocussedTask();
   }
+
+  Future<TaskData> getTaskData() async {
+    return TaskData(
+      tasks: tasks,
+      focussedTaskId: (await getFocussedTask())?.id ?? -1,
+    );
+  }
 }

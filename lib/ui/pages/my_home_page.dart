@@ -117,23 +117,29 @@ class _MyHomePageState extends State<MyHomePage> {
             // ignore: prefer_const_constructors
             TaskTimer(),
             const SizedBox(height: 32),
-            // TODO: replace nested FutureBuilder with Consumer
-            //    e.g. by adding new method to TaskProvider that returns
-            //    an object { tasks: List<Task>, focussedTaskId: int }
-            FutureBuilder<List<Task>>(
-              future: taskProvider.getTasks(),
-              builder: (context, snapshot) {
-                var tasks = snapshot.data ?? [];
-                if (!displayDone) {
-                  tasks = tasks.where((task) => !task.isDone).toList();
-                }
-                return FutureBuilder(
-                  future: taskProvider.getFocussedTask(),
+            Consumer<TaskProvider>(
+              builder: (context, taskProvider, child) {
+                return FutureBuilder<TaskData>(
+                  future: taskProvider.getTaskData(),
                   builder: (context, snapshot) {
-                    var focussedTaskId = snapshot.data?.id ?? -1;
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return const CircularProgressIndicator();
+                    }
+
+                    if (snapshot.hasError) {
+                      return Text('Error: ${snapshot.error}');
+                    }
+
+                    TaskData taskData = snapshot.data!;
+                    List<Task> tasks = taskData.tasks;
+
+                    if (!displayDone) {
+                      tasks = tasks.where((task) => !task.isDone).toList();
+                    }
+
                     return TaskList(
                       tasks: tasks,
-                      focussedTaskId: focussedTaskId,
+                      focussedTaskId: taskData.focussedTaskId,
                     );
                   },
                 );
