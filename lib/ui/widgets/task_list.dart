@@ -23,66 +23,60 @@ class _TaskListState extends State<TaskList> {
     final theme = Theme.of(context);
     final TaskProvider taskProvider = Provider.of<TaskProvider>(context);
 
-    return Flexible(
-      child: FractionallySizedBox(
-        heightFactor: 0.75,
-        widthFactor: 0.75,
-        child: Column(
-          children: [
-            Container(
-              decoration: taskListBoxDecoration(theme),
-              margin: const EdgeInsets.symmetric(vertical: 8),
-              padding: const EdgeInsets.fromLTRB(16, 8, 8, 8),
-              child: Row(
-                children: [
-                  Expanded(
-                    child: TextField(
-                      controller: addTaskController,
-                      style: theme.textTheme.bodyLarge,
-                      decoration: InputDecoration(
-                        labelText: context.loc.addTask,
-                        border: InputBorder.none,
-                      ),
-                      onSubmitted: (content) async {
-                        if (content.isNotEmpty) {
-                          await taskProvider.addTask(Task(
-                            content: content,
-                          ));
-                          addTaskController.clear();
-                        }
-                      },
-                    ),
+    return Column(
+      children: [
+        Container(
+          decoration: taskListBoxDecoration(theme),
+          margin: const EdgeInsets.symmetric(vertical: 8),
+          padding: const EdgeInsets.fromLTRB(16, 8, 8, 8),
+          child: Row(
+            children: [
+              Expanded(
+                child: TextField(
+                  controller: addTaskController,
+                  style: theme.textTheme.bodyLarge,
+                  decoration: InputDecoration(
+                    labelText: context.loc.addTask,
+                    border: InputBorder.none,
                   ),
-                  IconButton(
-                    icon: const Icon(Icons.add),
-                    onPressed: () async {
-                      final String content = addTaskController.text;
-                      if (content.isEmpty) {
-                        return;
-                      }
+                  onSubmitted: (content) async {
+                    if (content.isNotEmpty) {
                       await taskProvider.addTask(Task(
                         content: content,
                       ));
                       addTaskController.clear();
-                    },
-                  ),
-                ],
+                    }
+                  },
+                ),
               ),
-            ),
-            Flexible(
-              child: ListView.builder(
-                itemCount: widget.tasks.length,
-                itemBuilder: (context, index) {
-                  return TaskWidget(
-                    task: widget.tasks[index],
-                    focussedTaskId: widget.focussedTaskId,
-                  );
+              IconButton(
+                icon: const Icon(Icons.add),
+                onPressed: () async {
+                  final String content = addTaskController.text;
+                  if (content.isEmpty) {
+                    return;
+                  }
+                  await taskProvider.addTask(Task(
+                    content: content,
+                  ));
+                  addTaskController.clear();
                 },
               ),
-            ),
-          ],
+            ],
+          ),
         ),
-      ),
+        Flexible(
+          child: ListView.builder(
+            itemCount: widget.tasks.length,
+            itemBuilder: (context, index) {
+              return TaskWidget(
+                task: widget.tasks[index],
+                focussedTaskId: widget.focussedTaskId,
+              );
+            },
+          ),
+        ),
+      ],
     );
   }
 }

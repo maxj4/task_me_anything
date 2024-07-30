@@ -119,29 +119,36 @@ class _MyHomePageState extends State<MyHomePage> {
             const SizedBox(height: 32),
             Consumer<TaskProvider>(
               builder: (context, taskProvider, child) {
-                return FutureBuilder<TaskData>(
-                  future: taskProvider.getTaskData(),
-                  builder: (context, snapshot) {
-                    if (snapshot.connectionState == ConnectionState.waiting) {
-                      return const CircularProgressIndicator();
-                    }
+                return Flexible(
+                  child: FractionallySizedBox(
+                    heightFactor: 0.75,
+                    widthFactor: 0.75,
+                    child: FutureBuilder<TaskData>(
+                      future: taskProvider.getTaskData(),
+                      builder: (context, snapshot) {
+                        if (snapshot.connectionState ==
+                            ConnectionState.waiting) {
+                          return const CircularProgressIndicator();
+                        }
 
-                    if (snapshot.hasError) {
-                      return Text('Error: ${snapshot.error}');
-                    }
+                        if (snapshot.hasError) {
+                          return Text('Error: ${snapshot.error}');
+                        }
 
-                    TaskData taskData = snapshot.data!;
-                    List<Task> tasks = taskData.tasks;
+                        TaskData taskData = snapshot.data!;
+                        List<Task> tasks = taskData.tasks;
 
-                    if (!displayDone) {
-                      tasks = tasks.where((task) => !task.isDone).toList();
-                    }
+                        if (!displayDone) {
+                          tasks = tasks.where((task) => !task.isDone).toList();
+                        }
 
-                    return TaskList(
-                      tasks: tasks,
-                      focussedTaskId: taskData.focussedTaskId,
-                    );
-                  },
+                        return TaskList(
+                          tasks: tasks,
+                          focussedTaskId: taskData.focussedTaskId,
+                        );
+                      },
+                    ),
+                  ),
                 );
               },
             ),
