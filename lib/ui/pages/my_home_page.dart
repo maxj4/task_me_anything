@@ -99,7 +99,9 @@ class _MyHomePageState extends State<MyHomePage> {
             icon: Icon(
                 displayDone ? Icons.check_box : Icons.check_box_outline_blank),
             onPressed: () {
-              displayDone = !displayDone;
+              setState(() {
+                displayDone = !displayDone;
+              });
             },
           ),
           IconButton(

@@ -156,7 +156,9 @@ class _TaskTimerState extends State<TaskTimer> with WidgetsBindingObserver {
   }
 
   void _pauseTimer() {
-    _isRunning = false;
+    setState(() {
+      _isRunning = false;
+    });
     _timer?.cancel();
     AndroidAlarmManager.cancel(alarmId);
     _prefs.remove(scheduledTimeKey);
