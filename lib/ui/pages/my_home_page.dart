@@ -18,6 +18,7 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   bool displayDone = false;
+  TaskData? _previousTaskData;
 
   Future<void> _launchURL(Uri url) async {
     if (await canLaunchUrl(url)) {
@@ -130,9 +131,13 @@ class _MyHomePageState extends State<MyHomePage> {
                       builder: (context, snapshot) {
                         if (snapshot.connectionState ==
                             ConnectionState.waiting) {
-                          return const Center(
-                            child: CircularProgressIndicator(),
-                          );
+                          if (_previousTaskData == null) {
+                            return const Center(
+                              child: CircularProgressIndicator(),
+                            );
+                          } else {
+                            return _buildTaskList(_previousTaskData!);
+                          }
                         }
 
                         if (snapshot.hasError) {
@@ -140,16 +145,9 @@ class _MyHomePageState extends State<MyHomePage> {
                         }
 
                         TaskData taskData = snapshot.data!;
-                        List<Task> tasks = taskData.tasks;
+                        _previousTaskData = taskData;
 
-                        if (!displayDone) {
-                          tasks = tasks.where((task) => !task.isDone).toList();
-                        }
-
-                        return TaskList(
-                          tasks: tasks,
-                          focussedTaskId: taskData.focussedTaskId,
-                        );
+                        return _buildTaskList(taskData);
                       },
                     ),
                   ),
@@ -158,6 +156,23 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
           ],
         ),
+      ),
+    );
+  }
+
+  Widget _buildTaskList(TaskData taskData) {
+    List<Task> tasks = taskData.tasks;
+
+    if (!displayDone) {
+      tasks = tasks.where((task) => !task.isDone).toList();
+    }
+
+    return AnimatedSwitcher(
+      duration: const Duration(milliseconds: 600),
+      child: TaskList(
+        key: ValueKey(taskData.hashCode),
+        tasks: tasks,
+        focussedTaskId: taskData.focussedTaskId,
       ),
     );
   }
