@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 final themes = [
-  _lightPurpleTheme,
   _darkPurpleTheme,
+  _lightPurpleTheme,
 ];
 
 final ThemeData _lightPurpleTheme = ThemeData(

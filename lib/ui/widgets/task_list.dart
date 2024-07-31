@@ -227,7 +227,6 @@ class TaskWidget extends StatelessWidget {
                           content: TextField(
                             controller: _editTaskController,
                             onSubmitted: (content) async {
-                              // _editTaskController.text = content;
                               FocusScope.of(context).unfocus();
                             },
                           ),
