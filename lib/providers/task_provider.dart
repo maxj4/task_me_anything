@@ -21,6 +21,10 @@ class TaskProvider extends ChangeNotifier {
 
   Future<void> _loadTasks() async {
     _tasks = await _taskService.getTasks();
+    int focussedTaskId = (await getFocussedTask())?.id ?? -1;
+    if (focussedTaskId != -1) {
+      _moveFocussedTaskToTop(focussedTaskId);
+    }
     notifyListeners();
   }
 
@@ -68,5 +72,15 @@ class TaskProvider extends ChangeNotifier {
       tasks: tasks,
       focussedTaskId: (await getFocussedTask())?.id ?? -1,
     );
+  }
+
+  void _moveFocussedTaskToTop(int focussedTaskId) {
+    for (int i = 0; i < _tasks.length; i++) {
+      if (_tasks[i].id == focussedTaskId) {
+        Task focussedTask = _tasks.removeAt(i);
+        _tasks.insert(0, focussedTask);
+        break;
+      }
+    }
   }
 }

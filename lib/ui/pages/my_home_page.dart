@@ -30,7 +30,7 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     bool isDark = Theme.of(context).brightness == Brightness.dark;
-    final TaskProvider taskProvider = Provider.of<TaskProvider>(context);
+    Provider.of<TaskProvider>(context);
 
     return Scaffold(
       appBar: AppBar(
