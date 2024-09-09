@@ -1,0 +1,43 @@
+{
+    "helloWorld": "Hello World from {name}!",
+    "@helloWorld": {
+      "description": "The conventional newborn programmer greeting",
+      "placeholders": {
+        "name": {
+            "type": "String",
+            "example": "Max"
+        }
+      }
+    },
+    "toggleLocale": "Toggle Locale",
+    "toggleTheme": "Toggle Theme",
+    "navExampleGo": "Navigation Example",
+    "navExampleBack": "Go Back",
+    "notifExample": "Send Notification",
+    "notifTitle": "Notification Example",
+    "notifBody": "This is an example Notification.",
+    "addTask": "Add a new Task",
+    "taskDeleted": "Task deleted.",
+    "ok": "Ok",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "close": "Close",
+    "confirmDelete": "Delete this Task?",
+    "timeSpent": "Log Time",
+    "minutes": "Minutes",
+    "start": "Start",
+    "pause": "Pause",
+    "reset": "Reset",
+    "notifTitle": "Time's up!",
+    "notifBody": "Time to take a break! :-)",
+    "save": "Save",
+    "editTask": "Edit Task",
+    "edit": "Edit",
+    "markDone": "Done",
+    "markUndone": "Undone",
+    "logTime": "Log Time",
+    "alarmPermissionDenied": "Alarm permission is required for the timer to work properly.",
+    "aboutTitle": "About",
+    "aboutContent": "Task Me Anything is a simple task manager app that helps you focus on one task at a time.\nThis is a Hobby project by Max Jonas (",
+    "aboutIconCredits": ").\n\nThe App Icon is provided by "
+  }
