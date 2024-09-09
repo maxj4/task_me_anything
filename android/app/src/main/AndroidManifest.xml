@@ -1,4 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
+<<<<<<< HEAD
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
     <uses-permission android:name="android.permission.VIBRATE"/>
     <uses-permission android:name="android.permission.WAKE_LOCK"/>
@@ -8,6 +9,12 @@
         android:label="Task Me Anything"
         android:name="${applicationName}"
         android:icon="@mipmap/launcher_icon">
+=======
+    <application
+        android:label="task_me_anything"
+        android:name="${applicationName}"
+        android:icon="@mipmap/ic_launcher">
+>>>>>>> fix-build
         <activity
             android:name=".MainActivity"
             android:exported="true"
@@ -16,9 +23,13 @@
             android:theme="@style/LaunchTheme"
             android:configChanges="orientation|keyboardHidden|keyboard|screenSize|smallestScreenSize|locale|layoutDirection|fontScale|screenLayout|density|uiMode"
             android:hardwareAccelerated="true"
+<<<<<<< HEAD
             android:windowSoftInputMode="adjustResize"
             android:showWhenLocked="true">
             <!-- android:turnScreenOn="true"> -->
+=======
+            android:windowSoftInputMode="adjustResize">
+>>>>>>> fix-build
             <!-- Specifies an Android theme to apply to this Activity as soon as
                  the Android process has started. This theme is visible to the user
                  while the Flutter UI initializes. After that, this theme continues
@@ -37,6 +48,7 @@
         <meta-data
             android:name="flutterEmbedding"
             android:value="2" />
+<<<<<<< HEAD
         <service
             android:name="dev.fluttercommunity.plus.androidalarmmanager.AlarmService"
             android:permission="android.permission.BIND_JOB_SERVICE"
@@ -52,6 +64,8 @@
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>
         </receiver>
+=======
+>>>>>>> fix-build
     </application>
     <!-- Required to query activities that can process text, see:
          https://developer.android.com/training/package-visibility and
@@ -63,10 +77,13 @@
             <action android:name="android.intent.action.PROCESS_TEXT"/>
             <data android:mimeType="text/plain"/>
         </intent>
+<<<<<<< HEAD
         <intent>
           <action android:name="android.intent.action.VIEW" />
           <category android:name="android.intent.category.BROWSABLE" />
           <data android:scheme="https" />
         </intent>
+=======
+>>>>>>> fix-build
     </queries>
 </manifest>

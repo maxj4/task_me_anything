@@ -8,7 +8,11 @@
 PRODUCT_NAME = task_me_anything
 
 // The application's bundle identifier
+<<<<<<< HEAD
 PRODUCT_BUNDLE_IDENTIFIER = dev.maxjonas.task_me_anything
+=======
+PRODUCT_BUNDLE_IDENTIFIER = com.example.taskMeAnything
+>>>>>>> fix-build
 
 // The copyright displayed in application information
 PRODUCT_COPYRIGHT = Copyright © 2024 com.example. All rights reserved.

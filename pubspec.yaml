@@ -1,5 +1,9 @@
 name: task_me_anything
+<<<<<<< HEAD
 description: "A simple personal task manager app."
+=======
+description: "A new Flutter project."
+>>>>>>> fix-build
 # The following line prevents the package from being accidentally published to
 # pub.dev using `flutter pub publish`. This is preferred for private packages.
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
@@ -19,7 +23,11 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 version: 1.0.0+1
 
 environment:
+<<<<<<< HEAD
   sdk: '>=3.4.0 <4.0.0'
+=======
+  sdk: ^3.5.2
+>>>>>>> fix-build
 
 # Dependencies specify other packages that your package needs in order to work.
 # To automatically upgrade your package dependencies to the latest versions
@@ -30,12 +38,16 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+<<<<<<< HEAD
   flutter_localizations:
     sdk: flutter
+=======
+>>>>>>> fix-build
 
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
+<<<<<<< HEAD
   cupertino_icons: ^1.0.6
   intl: ^0.19.0
   go_router: ^14.1.4
@@ -48,6 +60,21 @@ dependencies:
   permission_handler: ^11.3.1
   android_alarm_manager_plus: ^4.0.3
   url_launcher: ^6.3.0
+=======
+  cupertino_icons: ^1.0.8
+  shared_preferences: ^2.3.2
+  flutter_localizations:
+    sdk: flutter
+  intl: any
+  flutter_local_notifications: ^17.2.2
+  go_router: ^14.2.7
+  google_fonts: ^6.2.1
+  provider: ^6.1.2
+  url_launcher: ^6.3.0
+  android_alarm_manager_plus: ^4.0.4
+  permission_handler: ^11.3.1
+  sqflite: ^2.3.3+1
+>>>>>>> fix-build
 
 dev_dependencies:
   flutter_test:
@@ -60,6 +87,7 @@ dev_dependencies:
   # rules and activating additional ones.
   flutter_lints: ^4.0.0
 
+<<<<<<< HEAD
   flutter_launcher_icons: ^0.13.1
 
 flutter_launcher_icons:
@@ -77,6 +105,8 @@ flutter_launcher_icons:
     image_path: "assets/images/icon.png"
     icon_size: 48
 
+=======
+>>>>>>> fix-build
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
 
@@ -96,10 +126,17 @@ flutter:
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see
+<<<<<<< HEAD
   # https://flutter.dev/assets-and-images/#resolution-aware
 
   # For details regarding adding assets from package dependencies, see
   # https://flutter.dev/assets-and-images/#from-packages
+=======
+  # https://flutter.dev/to/resolution-aware-images
+
+  # For details regarding adding assets from package dependencies, see
+  # https://flutter.dev/to/asset-from-package
+>>>>>>> fix-build
 
   # To add custom fonts to your application, add a fonts section here,
   # in this "flutter" section. Each entry in this list should have a
@@ -119,4 +156,8 @@ flutter:
   #         weight: 700
   #
   # For details regarding fonts from package dependencies,
+<<<<<<< HEAD
   # see https://flutter.dev/custom-fonts/#from-packages
+=======
+  # see https://flutter.dev/to/font-from-package
+>>>>>>> fix-build
