@@ -1,4 +1,4 @@
-package com.example.task_me_anything
+package dev.maxjonas.task_me_anything
 
 import io.flutter.embedding.android.FlutterActivity
 
