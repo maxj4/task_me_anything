@@ -8,19 +8,28 @@ final themes = [
 
 final ThemeData _lightPurpleTheme = ThemeData(
   useMaterial3: true,
-  colorScheme: const ColorScheme.light(
-    primary: Color(0xFFBB86FC), // Light purple
+  colorScheme: ColorScheme(
+    brightness: Brightness.light,
+    primary: const Color(0xFFBB86FC),
     onPrimary: Colors.white,
-    secondary: Color(0xFFFFD54F), // Complementary yellow
+    secondary: const Color(0xFFFFD54F),
     onSecondary: Colors.black,
-    background: Color(0xFFF8F0FF), // Slightly purple background
-    onBackground: Colors.black,
+    tertiary: const Color(0xFFBB86FC),
+    onTertiary: Colors.white,
+    error: const Color(0xFFD32F2F),
+    onError: Colors.white,
     surface: Colors.white,
     onSurface: Colors.black,
-    error: Color(0xFFD32F2F),
-    onError: Colors.white,
+    surfaceTint: const Color(0xFFBB86FC),
+    surfaceContainerHighest: const Color(0xFFF8F0FF),
+    onSurfaceVariant: Colors.black,
+    outline: const Color(0xFFBB86FC),
+    scrim: Colors.black.withOpacity(0.5),
+    inverseSurface: Colors.black,
+    onInverseSurface: Colors.white,
+    inversePrimary: const Color(0xFFFFD54F),
+    shadow: Colors.black.withOpacity(0.2),
   ),
-  brightness: Brightness.light,
   textTheme: TextTheme(
     displayLarge: GoogleFonts.oswald(
       fontSize: 72,
@@ -97,19 +106,28 @@ final ThemeData _lightPurpleTheme = ThemeData(
 
 final ThemeData _darkPurpleTheme = ThemeData(
   useMaterial3: true,
-  colorScheme: const ColorScheme.dark(
-    primary: Color(0xFFBB86FC), // Light purple
+  colorScheme: const ColorScheme(
+    brightness: Brightness.dark,
+    primary: Color(0xFFBB86FC),
     onPrimary: Colors.black,
-    secondary: Color(0xFFFFD54F), // Complementary yellow
+    secondary: Color(0xFFFFD54F),
     onSecondary: Colors.black,
-    background: Color(0xFF3F3B58), // Slightly purple background
-    onBackground: Colors.white,
-    surface: Color(0xFF4E4B6A),
-    onSurface: Colors.white,
+    tertiary: Color(0xFFBB86FC),
+    onTertiary: Colors.black,
     error: Color(0xFFCF6679),
     onError: Colors.black,
+    surface: Color(0xFF4E4B6A),
+    onSurface: Colors.white,
+    surfaceContainerHighest: Color(0xFF3F3B58),
+    onSurfaceVariant: Colors.white,
+    outline: Color(0xFFBB86FC),
+    surfaceTint: Color(0xFFBB86FC),
+    scrim: Colors.black,
+    inverseSurface: Colors.white,
+    onInverseSurface: Colors.black,
+    inversePrimary: Color(0xFFFFD54F),
+    shadow: Colors.black,
   ),
-  brightness: Brightness.dark,
   textTheme: TextTheme(
     displayLarge: GoogleFonts.oswald(
       fontSize: 72,
