@@ -5,11 +5,11 @@ import 'package:task_me_anything/providers/theme_provider.dart';
 import 'package:task_me_anything/repositories/task_repository.dart';
 import 'package:task_me_anything/repositories/task_repository_impl.dart';
 import 'package:task_me_anything/services/task_service.dart';
-import 'package:task_me_anything/shared/router_config.dart';
 import 'package:task_me_anything/services/notification_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
+import 'package:task_me_anything/ui/pages/my_home_page.dart';
 import 'package:task_me_anything/utils/db_helper.dart';
 
 void main() async {
@@ -38,7 +38,7 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp.router(
+    return MaterialApp(
       title: 'Task Me Anything',
       debugShowCheckedModeBanner: false,
       // l10n
@@ -47,8 +47,7 @@ class MyApp extends StatelessWidget {
       // locale and theme using providers
       locale: Provider.of<LocaleProvider>(context).locale,
       theme: Provider.of<ThemeProvider>(context).currentTheme,
-      // go_router
-      routerConfig: router,
+      home: const MyHomePage(),
     );
   }
 }
