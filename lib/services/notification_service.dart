@@ -25,31 +25,16 @@ class NotificationService {
     required String title,
     required String body,
   }) async {
-    final List<AndroidNotificationAction> actions = [
-      const AndroidNotificationAction(
-        'dismiss_action',
-        'Dismiss',
-        showsUserInterface: true,
-        cancelNotification: true,
-      ),
-    ];
-
-    final AndroidNotificationDetails androidPlatformChannelSpecifics =
+    const AndroidNotificationDetails androidPlatformChannelSpecifics =
         AndroidNotificationDetails(
       'alarm_channel_id',
       'Alarm Notifications',
-      importance: Importance.max,
-      priority: Priority.high,
       playSound: true,
-      ongoing: true,
-      autoCancel: false,
-      fullScreenIntent: true,
       category: AndroidNotificationCategory.alarm,
-      actions: actions,
       visibility: NotificationVisibility.public,
     );
 
-    final NotificationDetails platformChannelSpecifics =
+    const NotificationDetails platformChannelSpecifics =
         NotificationDetails(android: androidPlatformChannelSpecifics);
 
     await _notificationsPlugin.show(
