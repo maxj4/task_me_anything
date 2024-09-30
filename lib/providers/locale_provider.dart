@@ -20,7 +20,7 @@ class LocaleProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  void _setLocale(Locale locale) async {
+  Future<void> _setLocale(Locale locale) async {
     // return if the locale is not supported
     if (!AppLocalizations.supportedLocales.contains(locale)) {
       return;
@@ -32,7 +32,7 @@ class LocaleProvider extends ChangeNotifier {
     await _prefs.setString(_localePreferenceKey, locale.languageCode);
   }
 
-  void _loadLocale() async {
+  Future<void> _loadLocale() async {
     _prefs = await SharedPreferences.getInstance();
     final localeString = _prefs.getString(_localePreferenceKey);
     if (localeString != null) {
