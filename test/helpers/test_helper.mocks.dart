@@ -8,6 +8,7 @@ import 'dart:async' as _i3;
 import 'package:mockito/mockito.dart' as _i1;
 import 'package:task_me_anything/models/task.dart' as _i4;
 import 'package:task_me_anything/repositories/task_repository.dart' as _i2;
+import 'package:task_me_anything/services/task_service.dart' as _i5;
 
 // ignore_for_file: type=lint
 // ignore_for_file: avoid_redundant_argument_values
@@ -112,4 +113,106 @@ class MockTaskRepository extends _i1.Mock implements _i2.TaskRepository {
         returnValue: _i3.Future<void>.value(),
         returnValueForMissingStub: _i3.Future<void>.value(),
       ) as _i3.Future<void>);
+}
+
+/// A class which mocks [TaskService].
+///
+/// See the documentation for Mockito's code generation for more information.
+class MockTaskService extends _i1.Mock implements _i5.TaskService {
+  MockTaskService() {
+    _i1.throwOnMissingStub(this);
+  }
+
+  @override
+  _i3.Future<List<_i4.Task>> getTasks() => (super.noSuchMethod(
+        Invocation.method(
+          #getTasks,
+          [],
+        ),
+        returnValue: _i3.Future<List<_i4.Task>>.value(<_i4.Task>[]),
+      ) as _i3.Future<List<_i4.Task>>);
+
+  @override
+  _i3.Future<void> addTask(_i4.Task? task) => (super.noSuchMethod(
+        Invocation.method(
+          #addTask,
+          [task],
+        ),
+        returnValue: _i3.Future<void>.value(),
+        returnValueForMissingStub: _i3.Future<void>.value(),
+      ) as _i3.Future<void>);
+
+  @override
+  _i3.Future<void> editTaskContent(
+    int? id,
+    String? content,
+  ) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #editTaskContent,
+          [
+            id,
+            content,
+          ],
+        ),
+        returnValue: _i3.Future<void>.value(),
+        returnValueForMissingStub: _i3.Future<void>.value(),
+      ) as _i3.Future<void>);
+
+  @override
+  _i3.Future<void> deleteTask(int? id) => (super.noSuchMethod(
+        Invocation.method(
+          #deleteTask,
+          [id],
+        ),
+        returnValue: _i3.Future<void>.value(),
+        returnValueForMissingStub: _i3.Future<void>.value(),
+      ) as _i3.Future<void>);
+
+  @override
+  _i3.Future<void> toggleIsDone(int? id) => (super.noSuchMethod(
+        Invocation.method(
+          #toggleIsDone,
+          [id],
+        ),
+        returnValue: _i3.Future<void>.value(),
+        returnValueForMissingStub: _i3.Future<void>.value(),
+      ) as _i3.Future<void>);
+
+  @override
+  _i3.Future<void> logTime({
+    required int? id,
+    required int? minutes,
+  }) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #logTime,
+          [],
+          {
+            #id: id,
+            #minutes: minutes,
+          },
+        ),
+        returnValue: _i3.Future<void>.value(),
+        returnValueForMissingStub: _i3.Future<void>.value(),
+      ) as _i3.Future<void>);
+
+  @override
+  _i3.Future<void> setFocussedTask(int? id) => (super.noSuchMethod(
+        Invocation.method(
+          #setFocussedTask,
+          [id],
+        ),
+        returnValue: _i3.Future<void>.value(),
+        returnValueForMissingStub: _i3.Future<void>.value(),
+      ) as _i3.Future<void>);
+
+  @override
+  _i3.Future<_i4.Task?> getFocussedTask() => (super.noSuchMethod(
+        Invocation.method(
+          #getFocussedTask,
+          [],
+        ),
+        returnValue: _i3.Future<_i4.Task?>.value(),
+      ) as _i3.Future<_i4.Task?>);
 }
