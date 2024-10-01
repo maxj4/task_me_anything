@@ -6,11 +6,9 @@ import 'package:task_me_anything/providers/locale_provider.dart';
 void main() {
   group('LocaleProvider Tests', () {
     late LocaleProvider localeProvider;
-    late SharedPreferences prefs;
 
     setUp(() async {
       SharedPreferences.setMockInitialValues({});
-      prefs = await SharedPreferences.getInstance();
       localeProvider = LocaleProvider();
     });
 
